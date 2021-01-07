@@ -13,13 +13,13 @@
   set $ws9 "9"
   set $ws10 "10"
 
-  # border colors
-  set $bg-color            #20242a
-  set $inactive-bg-color   #383d48
-  set $text-color          #f3f4f5
-  set $inactive-text-color #676e7d
+  # border colors [nord theme]
+  set $bg-color            #2e3440
+  set $inactive-bg-color   #4c566a
+  set $text-color          #d8dee9
+  set $inactive-text-color #969ca3
   set $urgent-bg-color     #bd2c40
-  set $indicator-color     #383d48
+  set $indicator-color     $bg-color
 
 #_______________________________________________________________________________
 
@@ -27,10 +27,11 @@
 #_visuals_______________________________________________________________________
 
   # font
-  font pango:DejaVu Sans Mono 8
+  font pango:Cantarell 9
 
   # window borders
-  for_window [class="^.*"] border pixel 0
+  default_border none
+  default_floating_border normal
 
   hide_edge_borders both
 
@@ -51,21 +52,8 @@
   # Use Mouse+$mod to drag floating windows to their wanted position
   floating_modifier $mod
 
-  # assign workspaces to applications
-  assign [class="Firefox"] $ws1
-  assign [class="Htop"] $ws2
-  assign [class="Sublime_text"] $ws3
-  assign [class="Thunar"] $ws4
-  assign [class="Ranger"] $ws4
-  assign [class="Inkscape"] $ws5
-  assign [class="Gimp"] $ws5
-  assign [class="Blender"] $ws5
-  assign [class="Thunderbird"] $ws6
-  assign [class="Steam"] $ws9
-  assign [class="Arandr"] $ws10
-  assign [class="Pavucontrol"] $ws10
-  assign [class="Lxappearance"] $ws10
-  assign [class="Nvidia-settings"] $ws10
+  # focus follows mouse cursor, focuses hovered windows
+  focus_follows_mouse no
 
 #_______________________________________________________________________________
 
@@ -81,7 +69,7 @@
   # exit i3 (logs you out of your X session)
   bindsym $mod+Shift+e exec "i3-nagbar -t warning -m 'You pressed the exit shortcut. Do you really want to exit i3? This will end your X session.' -B 'Yes, exit i3' 'i3-msg exit'"
 
-  # start a terminal
+  # start a terminaql
   bindsym $mod+Return exec i3-sensible-terminal
 
   # kill focused window
@@ -89,14 +77,9 @@
 
   # start dmenu (a program launcher)
   bindsym $mod+d exec dmenu_run
+  #bindsym $mod+d exec rofi -show drun -show-icons
 
-  # change focus
-  bindsym $mod+j focus left
-  bindsym $mod+k focus down
-  bindsym $mod+l focus up
-  bindsym $mod+semicolon focus right
-
-  # alternatively, you can use the cursor keys:
+  # change focus:
   bindsym $mod+Left focus left
   bindsym $mod+Down focus down
   bindsym $mod+Up focus up
@@ -210,16 +193,12 @@
     bindsym w exec --no-startup-id /usr/bin/firefox; workspace $ws1 mode "default"
     bindsym h exec --no-startup-id /usr/bin/termite -e htop -t Htop; workspace $ws2; mode "default"
     bindsym t exec --no-startup-id /usr/bin/subl; workspace $ws3; mode "default"
-    bindsym r exec --no-startup-id /usr/bin/termite -e ranger -t Ranger; workspace $ws4; mode "default"
-    bindsym f exec --no-startup-id /usr/bin/thunar; workspace $ws4; mode "default"
-    bindsym i exec --no-startup-id /usr/bin/inkscape; workspace $ws5; mode "default"
-    bindsym g exec --no-startup-id /usr/bin/gimp; workspace $ws5; mode "default"
-    bindsym b exec --no-startup-id /usr/bin/blender; workspace $ws5; mode "default"
-    bindsym m exec --no-startup-id /usr/bin/thunderbird; workspace $ws6; mode "default"
-    bindsym s exec --no-startup-id $HOME/data/system/script/open_steam.sh; workspace $ws9; mode "default"
+    bindsym f exec --no-startup-id /usr/bin/termite -e ranger -t Ranger; workspace $ws4; mode "default"
+    bindsym i exec --no-startup-id /usr/bin/inkscape; workspace $ws6; mode "default"
+    bindsym g exec --no-startup-id /usr/bin/gimp; workspace $ws6; mode "default"
+    bindsym m exec --no-startup-id /usr/bin/thunderbird; workspace $ws7; mode "default"
     bindsym n exec --no-startup-id /usr/bin/nvidia-settings; workspace $ws10; mode "default"
     bindsym p exec --no-startup-id /usr/bin/pavucontrol; workspace $ws10; mode "default"
-    bindsym a exec --no-startup-id /usr/bin/arandr; workspace $ws10; mode "default"
 
     # back to normal: Enter or Escape or $mod+r
     bindsym Return mode "default"
@@ -231,19 +210,26 @@
 
 #_custom_keybindings____________________________________________________________
 
+  # screen locking
+  bindsym $mod+l exec dm-tool switch-to-greeter
+
   # Pulse Audio controls
-  bindsym XF86AudioRaiseVolume exec --no-startup-id pactl set-sink-volume 0 +5%
-  bindsym XF86AudioLowerVolume exec --no-startup-id pactl set-sink-volume 0 -5%
-  bindsym XF86AudioMute exec --no-startup-id pactl set-sink-mute 0 toggle
+  bindsym Mod1+a exec --no-startup-id $HOME/data/system/script/toogle_audio.sh
+  bindsym XF86AudioRaiseVolume exec --no-startup-id pactl set-sink-volume @DEFAULT_SINK@ +5%
+  bindsym XF86AudioLowerVolume exec --no-startup-id pactl set-sink-volume @DEFAULT_SINK@ -5%
+  bindsym XF86AudioMute exec --no-startup-id pactl set-sink-mute @DEFAULT_SINK@ toggle
 
   # Sreen brightness controls
-  bindsym XF86MonBrightnessUp exec xbacklight -inc 5
-  bindsym XF86MonBrightnessDown exec xbacklight -dec 5
+  bindsym XF86MonBrightnessUp exec --no-startup-id xbacklight -inc 5
+  bindsym XF86MonBrightnessDown exec --no-startup-id xbacklight -dec 5
 
 #_______________________________________________________________________________
 
 
 #_auto_start_____________________________________________________________________
+
+  # activate screen locking
+  exec --no-startup-id xss-lock dm-tool lock
 
   # set background
   exec_always --no-startup-id $HOME/data/system/script/set_background.sh
@@ -252,9 +238,9 @@
   exec --no-startup-id compton
 
   # start polybar
-  exec_always --no-startup-id $HOME/.config/polybar/launch.sh
+  exec_always --no-startup-id $HOME/data/system/config/polybar/launch.sh
 
-  exec /usr/bin/firefox
+  exec --no-startup-id i3-msg 'workspace $ws1; exec /usr/bin/firefox'
   exec --no-startup-id i3-msg 'workspace $ws2; exec /usr/bin/termite'
   exec --no-startup-id i3-msg 'workspace $ws2; exec /usr/bin/termite'
 
