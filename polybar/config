@@ -1,0 +1,215 @@
+; To learn more about how to configure Polybar go to:
+; https://github.com/jaagr/polybar
+
+;_______________________________________________________________________________
+[settings]
+
+screenchange-reload = true
+;_______________________________________________________________________________
+
+;_______________________________________________________________________________
+[global/wm]
+
+margin-top = 5
+margin-bottom = 5
+;_______________________________________________________________________________
+
+;_______________________________________________________________________________
+[colors]
+
+background = #171a20
+background-alt = #383d48
+foreground = #dfdfdf
+foreground-alt = #555
+primary = #fff
+secondary = #e60053
+alert = #bd2c40
+;_______________________________________________________________________________
+
+;_______________________________________________________________________________
+[bar/task]
+
+width = 100%
+height = 25
+line-size = 3
+border-top-size = 1
+padding-left = 0
+padding-right = 1
+module-margin-left = 1
+module-margin-right = 2
+
+bottom = true
+fixed-center = true
+
+modules-left = i3
+modules-center = xwindow
+modules-right = eth wlan xbacklight pulseaudio battery date
+
+font-0 = unifont:fontformat=truetype:size=9:antialias=true;3
+font-1 = FontAwesome:pixelsize=12;antialias=false;4
+
+background = ${colors.background}
+foreground = ${colors.foreground}
+border-color = #111
+line-color = #f00
+
+cursor-click = pointer
+cursor-scroll = ns-resize
+;_______________________________________________________________________________
+
+;_______________________________________________________________________________
+[module/xwindow]
+
+type = internal/xwindow
+label = %title:0:50:...%
+;_______________________________________________________________________________
+
+;_______________________________________________________________________________
+[module/i3]
+
+type = internal/i3
+format = <label-state> <label-mode>
+index-sort = true
+wrapping-scroll = false
+
+label-mode-padding = 2
+label-mode-foreground = #000
+label-mode-background = ${colors.primary}
+
+; focused = Active workspace on focused monitor
+label-focused = %index%: %icon%
+label-focused-background = ${colors.background-alt}
+label-focused-padding = 2
+
+; unfocused = Inactive workspace on any monitor
+label-unfocused = %index%: %icon%
+label-unfocused-padding = 2
+
+; visible = Active workspace on unfocused monitor
+label-visible = %index%: %icon%
+label-visible-background = ${self.label-focused-background}
+:label-visible-underline = ${self.label-focused-underline}
+label-visible-padding = ${self.label-focused-padding}
+
+; urgent = Workspace with urgency hint set
+label-urgent = %index%: %icon%
+label-urgent-background = ${colors.alert}
+label-urgent-padding = 2
+
+ws-icon-0 = 1;
+ws-icon-1 = 2;
+ws-icon-2 = 3;
+ws-icon-3 = 4;
+ws-icon-4 = 5;
+ws-icon-5 = 6;
+ws-icon-6 = 7;
+ws-icon-7 = 9;
+ws-icon-8 = 10;
+;_______________________________________________________________________________
+
+;_______________________________________________________________________________
+[module/xbacklight]
+
+type = internal/xbacklight
+format = <ramp> <label>
+label = %percentage%%
+
+ramp-0 = 🌕
+ramp-1 = 🌔
+ramp-2 = 🌓
+ramp-3 = 🌒
+ramp-4 = 🌑
+
+enable-scroll = true
+;_______________________________________________________________________________
+
+;_______________________________________________________________________________
+[module/wlan]
+
+type = internal/network
+interface = wlp3s0
+interval = 3.0
+
+format-connected-prefix = " "
+format-connected = <label-connected>
+label-connected = %essid%: %local_ip%
+format-disconnected =
+;_______________________________________________________________________________
+
+;_______________________________________________________________________________
+[module/eth]
+
+type = internal/network
+interface = enp0s25
+interval = 3.0
+
+format-connected-prefix = " eth: "
+label-connected = %local_ip%
+format-disconnected =
+;_______________________________________________________________________________
+
+;_______________________________________________________________________________
+[module/date]
+
+type = internal/date
+interval = 5
+
+date =
+date-alt = " %d.%m.%Y"
+time = %H:%M
+time-alt = %H:%M:%S
+format-prefix = 
+label = %date% %time%
+;_______________________________________________________________________________
+
+;_______________________________________________________________________________
+[module/pulseaudio]
+
+type = internal/pulseaudio
+use-ui-max = false
+format-volume = <ramp-volume> <label-volume>
+
+label-volume = %percentage%%
+label-volume-foreground = ${root.foreground}
+label-muted =   muted
+label-muted-foreground = #666
+
+ramp-volume-0 = 
+ramp-volume-1 = 
+ramp-volume-2 = 
+;_______________________________________________________________________________
+
+;_______________________________________________________________________________
+[module/battery]
+
+type = internal/battery
+battery = BAT0
+adapter = AC
+full-at = 90
+poll-interval = 5
+
+format-charging = <animation-charging> <label-charging>
+format-discharging = <animation-discharging> <label-discharging>
+format-full-prefix = " "
+format-full-prefix-foreground = ${colors.foreground-alt}
+
+ramp-capacity-0 = 
+ramp-capacity-1 = 
+ramp-capacity-2 = 
+ramp-capacity-3 = 
+
+ramp-capacity-foreground = ${colors.foreground-alt}
+animation-charging-0 = 
+animation-charging-1 = 
+animation-charging-2 = 
+animation-charging-3 = 
+animation-charging-4 = 
+animation-charging-framerate = 750
+
+animation-discharging-0 = 
+animation-discharging-1 = 
+animation-discharging-2 = 
+animation-discharging-3 = 
+animation-discharging-4 = 
+animation-discharging-framerate = 750
+;_______________________________________________________________________________

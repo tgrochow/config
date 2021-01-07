@@ -1,4 +1,5 @@
 */*
 !i3/*
-!xorg.conf.d/*
+!polybar/*
 !sway/*
+!xorg.conf.d/*
